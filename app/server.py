@@ -1,36 +1,20 @@
-import json
 from flask import Flask, render_template, request, redirect, flash, url_for
-
 from datetime import datetime
 
-
-def loadClubs():
-    with open('databases/initial_databases/clubs.json') as c:
-        listOfClubs = json.load(c)['clubs']
-        return listOfClubs
+from app.db_context import DbContext
+from app.business import Business
 
 
-def loadCompetitions():
-    with open('databases/initial_databases/competitions.json') as comps:
-        listOfCompetitions = json.load(comps)['competitions']
-        return listOfCompetitions
-
-
-competitions = loadCompetitions()
-clubs = loadClubs()
-
-
-def retrieve_club(email):
-    club_list = [club for club in clubs if club['email'] == email]
-    if len(club_list) == 0:
-        return None
-    return club_list[0]
-
-
-def create_app(config):
+def create_app(config, running_env='production'):
     app = Flask(__name__)
     app.secret_key = 'something_special'
     app.config.from_object(config)
+
+    global business
+    business = Business(running_env)
+
+    global db_context
+    db_context = DbContext(running_env)
 
     @app.route('/')
     def index():
@@ -38,29 +22,34 @@ def create_app(config):
 
     @app.route('/showSummary', methods=['POST'])
     def show_summary():
-        club = retrieve_club(request.form['email'])
+        club = business.retrieve_club(request.form['email'])
         if club is None:
             return render_template('index.html', error=True)
-        return render_template('welcome.html', club=club, competitions=competitions, datetime=datetime)
+        return render_template('welcome.html', club=club, competitions=db_context.competitions, datetime=datetime)
 
     @app.route('/book/<competition>/<club>')
     def book(competition, club):
-        foundClub = [c for c in clubs if c['name'] == club][0]
-        foundCompetition = [c for c in competitions if c['name'] == competition][0]
-        if foundClub and foundCompetition:
-            return render_template('booking.html', club=foundClub, competition=foundCompetition)
+        found_club = [c for c in db_context.clubs if c['name'] == club][0]
+        found_competition = [c for c in db_context.competitions if c['name'] == competition][0]
+        if found_club and found_competition:
+            return render_template('booking.html', club=found_club, competition=found_competition)
         else:
             flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=competitions)
+            return render_template('welcome.html', club=club, competitions=db_context.competitions)
 
     @app.route('/purchasePlaces', methods=['POST'])
-    def purchasePlaces():
-        competition = [c for c in competitions if c['name'] == request.form['competition']][0]
-        club = [c for c in clubs if c['name'] == request.form['club']][0]
-        placesRequired = int(request.form['places'])
-        competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-        flash('Great-booking complete!')
-        return render_template('welcome.html', club=club, competitions=competitions)
+    def purchase_places():
+        purchase = business.set_club_points_balance(
+            request.form['club'], request.form['competition'], request.form['places']
+            )
+        if purchase['succeeded'] is False:
+            competition = [c for c in db_context.competitions if c['name'] == request.form['competition']][0]
+            flash("Not enough points available")
+            return render_template(
+                'booking.html', club=purchase['club'], competition=competition, error=True
+                )
+        flash("Great! Booking completed!")
+        return render_template('welcome.html', club=purchase['club'], competitions=purchase['competitions'])
 
 # TODO: Add route for points display
 

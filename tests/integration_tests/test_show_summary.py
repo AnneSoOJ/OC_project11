@@ -1,6 +1,6 @@
 class TestShowSummary:
 
-    def test_known_email_should_return_welcome_page(self, client):
+    def test_when_email_is_identified_then_return_http200_and_welcome_page(self, client):
         """
         Test to assert if email is checked as a registered one and therefore redirects to welcome/summary page
         """
@@ -10,7 +10,7 @@ class TestShowSummary:
         assert response.status_code == 200
         assert known_email in data
 
-    def test_unknown_email_should_return_index_page_with_error_message(self, client):
+    def test_when_email_is_unidentified_then_return_http200_and_error_message(self, client):
         """
         Test to assert if email is checked as a unregistered one and therefore displays an error message one index page
         """
