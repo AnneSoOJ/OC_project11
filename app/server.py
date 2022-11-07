@@ -25,7 +25,9 @@ def create_app(config, running_env='production'):
         club = business.retrieve_club(request.form['email'])
         if club is None:
             return render_template('index.html', error=True)
-        return render_template('welcome.html', club=club, competitions=db_context.competitions, datetime=datetime)
+        return render_template(
+            'welcome.html', club=club, competitions=db_context.competitions, datetime=datetime
+            )
 
     @app.route('/book/<competition>/<club>')
     def book(competition, club):
@@ -35,7 +37,9 @@ def create_app(config, running_env='production'):
             return render_template('booking.html', club=found_club, competition=found_competition)
         else:
             flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=db_context.competitions)
+            return render_template(
+                'welcome.html', club=club, competitions=db_context.competitions, datetime=datetime
+                )
 
     @app.route('/purchasePlaces', methods=['POST'])
     def purchase_places():
@@ -49,7 +53,9 @@ def create_app(config, running_env='production'):
                 'booking.html', club=purchase['club'], competition=competition, error=True
                 )
         flash("Great! Booking completed!")
-        return render_template('welcome.html', club=purchase['club'], competitions=purchase['competitions'])
+        return render_template(
+            'welcome.html', club=purchase['club'], competitions=purchase['competitions'], datetime=datetime
+            )
 
 # TODO: Add route for points display
 

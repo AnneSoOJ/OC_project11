@@ -34,3 +34,15 @@ class TestBookPlaces:
 
         assert result['succeeded'] is False
         assert result['error'] == 'Places total exceeds the maximum booking per competition'
+
+    def test_when_club_book_places_for_past_competition_then_return_succeed_false(self, business):
+        """
+        Test to assert if club is trying to purchase places for a past competition
+        """
+        club_name = "Simply Lift"
+        competition_name = "Fall Classic"
+        places = 4
+        result = business.book_places(club_name, competition_name, places)
+
+        assert result['succeeded'] is False
+        assert result['error'] == 'Places booking for this competition closed'

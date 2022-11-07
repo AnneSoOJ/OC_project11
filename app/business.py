@@ -1,9 +1,12 @@
 from app.db_context import DbContext
 
+from datetime import datetime
+
 
 class Business:
 
     MAX_BOOKING_PER_COMPETITION = 12
+    POINTS_PER_PLACE = 1
 
     def __init__(self, running_environment):
         self.db_context = DbContext(running_environment)
@@ -19,11 +22,14 @@ class Business:
         competition = [c for c in self.db_context.competitions if c['name'] == competition_name][0]
         places_required = int(places)
         result = {'succeeded': False, 'club': club, 'competitions': self.db_context.competitions}
-        if places_required > int(club['points']):
+        if places_required * self.POINTS_PER_PLACE > int(club['points']):
             result['error'] = "Not enough points available"
             return result
         if places_required > self.MAX_BOOKING_PER_COMPETITION:
             result['error'] = "Places total exceeds the maximum booking per competition"
+            return result
+        if datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') < datetime.now():
+            result['error'] = "Places booking for this competition closed"
             return result
         result['succeeded'] = True
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
