@@ -36,5 +36,7 @@ class Business:
             return result
         result['succeeded'] = True
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
+        club['points'] = int(club['points'])-places_required
         self.db_context.save_competitions()
+        self.db_context.save_clubs()
         return result

@@ -12,6 +12,7 @@ class TestPurchasePlaces:
         data = response.data.decode()
         assert response.status_code == 200
         assert 'Booking completed' in data
+        assert 'Points available: 4' in data
 
     def test_when_club_has_not_enough_points_to_purchase_places_then_return_http200_and_booking_page(self, client):
         """

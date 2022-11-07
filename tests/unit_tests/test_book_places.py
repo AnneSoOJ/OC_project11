@@ -11,6 +11,9 @@ class TestBookPlaces:
 
         assert result['succeeded'] is True
 
+        club = business.retrieve_club("kate@shelifts.co.uk")
+        assert club['points'] == 4
+
     def test_when_club_points_are_inferior_to_required_places_then_return_succeed_false(self, business):
         """
         Test to assert if club has not enough points to purchase places for a specific competition
