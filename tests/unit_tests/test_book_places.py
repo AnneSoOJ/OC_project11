@@ -46,3 +46,15 @@ class TestBookPlaces:
 
         assert result['succeeded'] is False
         assert result['error'] == 'Places booking for this competition closed'
+
+    def test_when_club_book_more_than_amount_of_places_available_then_return_succeed_false(self, business):
+        """
+        Test to assert if club is trying to purchase more places than the amount available for a specific competition
+        """
+        club_name = "She Lifts"
+        competition_name = "Summer Jam"
+        places = 10
+        result = business.book_places(club_name, competition_name, places)
+
+        assert result['succeeded'] is False
+        assert result['error'] == 'Not enough places available'

@@ -38,6 +38,7 @@ def reset_database():
 
     db_context.competitions = [
         {"name": "Spring Festival", "date": "2023-03-27 10:00:00", "numberOfPlaces": "25"},
-        {"name": "Fall Classic", "date": "2020-10-22 13:30:00", "numberOfPlaces": "13"}
+        {"name": "Fall Classic", "date": "2020-10-22 13:30:00", "numberOfPlaces": "13"},
+        {"name": "Summer Jam", "date": "2022-12-30 15:00:00", "numberOfPlaces": "5"}
     ]
     db_context.save_competitions()

@@ -51,3 +51,16 @@ class TestPurchasePlaces:
         data = response.data.decode()
         assert response.status_code == 200
         assert 'Places booking for this competition closed' in data
+
+    def test_when_club_book_more_than_amount_of_places_available_then_return_http200_and_booking_page(self, client):
+        """
+        Test to assert if places purchase is not completed and therefore redirects to booking/places purchase page
+        """
+        club_name = "She Lifts"
+        competition_name = "Summer Jam"
+        places = 10
+        response = client.post('/purchasePlaces',
+                               data={'club': club_name, 'competition': competition_name, 'places': places})
+        data = response.data.decode()
+        assert response.status_code == 200
+        assert 'Not enough places available' in data

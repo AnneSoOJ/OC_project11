@@ -31,6 +31,9 @@ class Business:
         if datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') < datetime.now():
             result['error'] = "Places booking for this competition closed"
             return result
+        if places_required > int(competition['numberOfPlaces']):
+            result['error'] = "Not enough places available"
+            return result
         result['succeeded'] = True
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
         self.db_context.save_competitions()
