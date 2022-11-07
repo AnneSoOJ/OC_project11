@@ -39,12 +39,12 @@ def create_app(config, running_env='production'):
 
     @app.route('/purchasePlaces', methods=['POST'])
     def purchase_places():
-        purchase = business.set_club_points_balance(
+        purchase = business.book_places(
             request.form['club'], request.form['competition'], request.form['places']
             )
         if purchase['succeeded'] is False:
             competition = [c for c in db_context.competitions if c['name'] == request.form['competition']][0]
-            flash("Not enough points available")
+            flash(purchase['error'])
             return render_template(
                 'booking.html', club=purchase['club'], competition=competition, error=True
                 )

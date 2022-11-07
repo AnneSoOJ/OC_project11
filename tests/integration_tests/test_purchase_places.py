@@ -25,3 +25,16 @@ class TestPurchasePlaces:
         data = response.data.decode()
         assert response.status_code == 200
         assert 'Not enough points available' in data
+
+    def test_when_club_book_more_than_the_maximum_amount_of_places_then_return_http200_and_booking_page(self, client):
+        """
+        Test to assert if places purchase is not completed and therefore redirects to booking/places purchase page
+        """
+        club_name = "Simply Lift"
+        competition_name = "Spring Festival"
+        places = 13
+        response = client.post('/purchasePlaces',
+                               data={'club': club_name, 'competition': competition_name, 'places': places})
+        data = response.data.decode()
+        assert response.status_code == 200
+        assert 'Places total exceeds the maximum booking per competition' in data
