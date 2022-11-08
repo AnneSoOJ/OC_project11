@@ -6,8 +6,10 @@ class TestShowSummary:
         """
         known_email = 'admin@irontemple.com'
         response = client.post('/showSummary', data={'email': known_email})
-        data = response.data.decode()
+
         assert response.status_code == 200
+
+        data = response.data.decode()
         assert known_email in data
 
     def test_when_email_is_unidentified_then_return_http200_and_error_message(self, client):
@@ -16,6 +18,8 @@ class TestShowSummary:
         """
         unknown_email = 'marketing@irontemple.com'
         response = client.post('/showSummary', data={'email': unknown_email})
-        data = response.data.decode()
+
         assert response.status_code == 200
+
+        data = response.data.decode()
         assert 'error' in data

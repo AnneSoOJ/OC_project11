@@ -6,6 +6,8 @@ class TestPointsDisplayBoard:
         """
         known_club = 'Iron Temple'
         response = client.get('/showClubs')
-        data = response.data.decode()
+
         assert response.status_code == 200
+
+        data = response.data.decode()
         assert known_club in data

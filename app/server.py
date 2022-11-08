@@ -31,15 +31,16 @@ def create_app(config, running_env='production'):
 
     @app.route('/book/<competition>/<club>')
     def book(competition, club):
-        found_club = [c for c in db_context.clubs if c['name'] == club][0]
-        found_competition = [c for c in db_context.competitions if c['name'] == competition][0]
-        if found_club and found_competition:
-            return render_template('booking.html', club=found_club, competition=found_competition)
-        else:
-            flash("Something went wrong-please try again")
+        found_club_list = [c for c in db_context.clubs if c['name'] == club]
+        found_competition_list = [c for c in db_context.competitions if c['name'] == competition]
+
+        if len(found_club_list) == 0 or len(found_competition_list) == 0:
+            flash("Something went wrong. Please try again!")
             return render_template(
                 'welcome.html', club=club, competitions=db_context.competitions, datetime=datetime
                 )
+
+        return render_template('booking.html', club=found_club_list[0], competition=found_competition_list[0])
 
     @app.route('/purchasePlaces', methods=['POST'])
     def purchase_places():

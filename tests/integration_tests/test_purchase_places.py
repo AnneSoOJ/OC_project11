@@ -9,8 +9,10 @@ class TestPurchasePlaces:
         places = 8
         response = client.post('/purchasePlaces',
                                data={'club': club_name, 'competition': competition_name, 'places': places})
-        data = response.data.decode()
+
         assert response.status_code == 200
+
+        data = response.data.decode()
         assert 'Booking completed' in data
         assert 'Points available: 4' in data
 
@@ -23,8 +25,10 @@ class TestPurchasePlaces:
         places = 8
         response = client.post('/purchasePlaces',
                                data={'club': club_name, 'competition': competition_name, 'places': places})
-        data = response.data.decode()
+
         assert response.status_code == 200
+
+        data = response.data.decode()
         assert 'Not enough points available' in data
 
     def test_when_club_book_more_than_the_maximum_amount_of_places_then_return_http200_and_booking_page(self, client):
@@ -36,8 +40,10 @@ class TestPurchasePlaces:
         places = 13
         response = client.post('/purchasePlaces',
                                data={'club': club_name, 'competition': competition_name, 'places': places})
-        data = response.data.decode()
+
         assert response.status_code == 200
+
+        data = response.data.decode()
         assert 'Places total exceeds the maximum booking per competition' in data
 
     def test_when_club_book_places_for_past_competition_then_return_http200_and_booking_page(self, client):
@@ -49,8 +55,10 @@ class TestPurchasePlaces:
         places = 4
         response = client.post('/purchasePlaces',
                                data={'club': club_name, 'competition': competition_name, 'places': places})
-        data = response.data.decode()
+
         assert response.status_code == 200
+
+        data = response.data.decode()
         assert 'Places booking for this competition closed' in data
 
     def test_when_club_book_more_than_amount_of_places_available_then_return_http200_and_booking_page(self, client):
@@ -62,6 +70,8 @@ class TestPurchasePlaces:
         places = 10
         response = client.post('/purchasePlaces',
                                data={'club': club_name, 'competition': competition_name, 'places': places})
-        data = response.data.decode()
+
         assert response.status_code == 200
+
+        data = response.data.decode()
         assert 'Not enough places available' in data
