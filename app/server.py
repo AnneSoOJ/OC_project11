@@ -57,7 +57,9 @@ def create_app(config, running_env='production'):
             'welcome.html', club=purchase['club'], competitions=purchase['competitions'], datetime=datetime
             )
 
-# TODO: Add route for points display
+    @app.route('/showClubs')
+    def show_clubs():
+        return render_template('clubs.html', clubs=db_context.clubs)
 
     @app.route('/logout')
     def logout():

@@ -13,6 +13,13 @@ def business():
 
 
 @pytest.fixture
+def db_context():
+    db_context = DbContext('test')
+    yield db_context
+    reset_database()
+
+
+@pytest.fixture
 def app():
     app = create_app(None, 'test')
     yield app
