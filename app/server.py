@@ -10,10 +10,8 @@ def create_app(config, running_env='production'):
     app.secret_key = 'something_special'
     app.config.from_object(config)
 
-    global business
     business = Business(running_env)
 
-    global db_context
     db_context = DbContext(running_env)
 
     @app.route('/')

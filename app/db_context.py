@@ -18,8 +18,8 @@ class DbContext:
 
     def load_clubs(self):
         with open(self.get_db_path('clubs.json')) as c:
-            listOfClubs = json.load(c)
-            return listOfClubs
+            list_of_clubs = json.load(c)
+            return list_of_clubs
 
     def save_clubs(self):
         with open(self.get_db_path('clubs.json'), 'w') as c:
@@ -27,8 +27,8 @@ class DbContext:
 
     def load_competitions(self):
         with open(self.get_db_path('competitions.json')) as comps:
-            listOfCompetitions = json.load(comps)
-            return listOfCompetitions
+            list_of_competitions = json.load(comps)
+            return list_of_competitions
 
     def save_competitions(self):
         with open(self.get_db_path('competitions.json'), 'w') as comps:
