@@ -21,7 +21,7 @@ def db_context():
 
 @pytest.fixture
 def app():
-    app = create_app(None, 'test')
+    app = create_app({"TESTING": True}, 'test')
     yield app
     reset_database()
 

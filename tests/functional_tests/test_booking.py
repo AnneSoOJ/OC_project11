@@ -28,7 +28,7 @@ class TestBooking:
 
         places = self.browser.find_element(By.NAME, "places")
         self.browser.implicitly_wait(1)
-        places.send_keys("3")
+        places.send_keys("1")
         self.browser.implicitly_wait(1)
 
         booking = self.browser.find_element(By.NAME, "book")
